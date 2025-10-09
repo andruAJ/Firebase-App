@@ -1,0 +1,45 @@
+.Index {
+    width: 75%;
+    align-items: flex-start;
+    justify-content: center;
+    align-self: center;
+    align-content: center;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.Rows {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.RowCells {
+    background-color: rgb(226, 226, 226);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-color: rgba(122, 122, 122, 0.52);
+    border-right-color: rgba(122, 122, 122, 0.52);
+    border-top-color: rgba(122, 122, 122, 0.52);
+    border-bottom-color: rgba(122, 122, 122, 0.52);
+    -unity-text-align: upper-center;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 60px;
+}
+
+.RowHeader {
+    background-color: rgb(232, 193, 22);
+    -unity-font-style: bold;
+}
