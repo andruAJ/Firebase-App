@@ -8,9 +8,11 @@ public class CompletePlayerController_NewInput : MonoBehaviour
     [Header("Movimiento")]
     public float speed = 5f;
 
-    [Header("UI")]
-    public Text countText;
-    public Text winText;
+    public Label countText;
+    public Label winText;
+
+    public GameObject root;
+    private UIDocument uiDocument;
 
     private Rigidbody2D rb2d;
     private int count;
@@ -26,6 +28,10 @@ public class CompletePlayerController_NewInput : MonoBehaviour
 
     void Start()
     {
+       
+        uiDocument = root.GetComponent<UIDocument>();
+        winText = uiDocument.rootVisualElement.Q<Label>("WinText");
+        countText = uiDocument.rootVisualElement.Q<Label>("CounterText");
         rb2d = GetComponent<Rigidbody2D>();
         count = 0;
         winText.text = "";
