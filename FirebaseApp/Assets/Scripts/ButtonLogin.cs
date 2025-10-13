@@ -4,33 +4,43 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class ButtonLogin : MonoBehaviour
 {
-    [SerializeField]
-    private Button _loginButton;
+    private UIDocument uiDocument;
 
-    [SerializeField]
-    private TMP_InputField _emailInputField;
-    [SerializeField]
-    private TMP_InputField _emailPasswordField;
+    private VisualElement signupCard;
+    private VisualElement loginCard;
+    private Button loginButton;
+    private TextField usernameField;
+    private TextField passwordField;
+    private Button registrarse;
 
-    void Reset()
-    {
-        _loginButton = GetComponent<Button>();
-        _emailInputField = GameObject.Find("InputFieldEmail").GetComponent<TMP_InputField>();
-        _emailPasswordField = GameObject.Find("InputFieldPassword").GetComponent<TMP_InputField>();
-    }
+    //void Reset()
+    //{
+    //    _loginButton = GetComponent<Button>();
+    //    _emailInputField = GameObject.Find("InputFieldEmail").GetComponent<TMP_InputField>();
+    //    _emailPasswordField = GameObject.Find("InputFieldPassword").GetComponent<TMP_InputField>();
+    //}
     void Start()
     {
-        _loginButton.onClick.AddListener(HandleLoginButtonClicked);
+        uiDocument = GetComponent<UIDocument>();
+        signupCard = uiDocument.rootVisualElement.Q<VisualElement>("SignUp_Card");
+        loginCard = uiDocument.rootVisualElement.Q<VisualElement>("LogIn_Card");
+        loginButton = loginCard.Q<Button>("LogIn_Button");
+        usernameField = loginCard.Q<TextField>("Username_TextField");
+        passwordField = loginCard.Q<TextField>("Password_TextField");
+        registrarse = loginCard.Q<Button>("Registrarse_Button");
+
+        loginButton.RegisterCallback<ClickEvent>(ev => HandleLoginButtonClicked());
+        registrarse.RegisterCallback<ClickEvent>(ev => { loginCard.style.display = DisplayStyle.None; signupCard.style.display = DisplayStyle.Flex; });
     }
 
     private void HandleLoginButtonClicked()
     {
         var auth = FirebaseAuth.DefaultInstance;
-        auth.SignInWithEmailAndPasswordAsync(_emailInputField.text, _emailPasswordField.text).ContinueWith(task => {
+        auth.SignInWithEmailAndPasswordAsync(usernameField.text, passwordField.text).ContinueWith(task => {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");

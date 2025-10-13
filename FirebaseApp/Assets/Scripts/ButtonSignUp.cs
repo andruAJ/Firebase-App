@@ -11,34 +11,43 @@ using UnityEngine.UIElements;
 public class ButtonSignUp : MonoBehaviour
 {
     private UIDocument uiDocument;
+
     private VisualElement signupCard;
+    private VisualElement loginCard;
     private Button signupButton;    //yo
+    private Button iniciarSesion;         //este es el botón para cambiar de carta
+    private TextField signupUsernameField;
+    private TextField signupPasswordField;
+
     private Coroutine _registrationCoroutine;
 
     private DatabaseReference mDatabaseRef;
 
-    void Reset()
-    {
-        signupCard = uiDocument.rootVisualElement.Q<VisualElement>("SignUp_Card");
-        signupButton = signupCard.Q<Button>("SignUp_Button");
-    }
+    //void Reset()
+    //{
+    //    signupCard = uiDocument.rootVisualElement.Q<VisualElement>("SignUp_Card");
+    //    signupButton = signupCard.Q<Button>("SignUp_Button");
+    //}
     // Start is called before the first frame update
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
         signupCard = uiDocument.rootVisualElement.Q<VisualElement>("SignUp_Card");
+        loginCard = uiDocument.rootVisualElement.Q<VisualElement>("LogIn_Card");
         signupButton = signupCard.Q<Button>("SignUp_Button");
         signupUsernameField = signupCard.Q<TextField>("Username_Register_TextField");
         signupPasswordField = signupCard.Q<TextField>("Password_Register_TextField");
         iniciarSesion = signupCard.Q<Button>("TienesCuenta_Button");
-        _registrationButton.onClick.AddListener(HandleRegisterButtonClicked);
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+
+        signupButton.RegisterCallback<ClickEvent>(ev => HandleRegisterButtonClicked());
+        iniciarSesion.RegisterCallback<ClickEvent>(ev => { signupCard.style.display = DisplayStyle.None; loginCard.style.display = DisplayStyle.Flex; });
     }
 
     private void HandleRegisterButtonClicked()
     {
-        string email = GameObject.Find("InputFieldEmail").GetComponent<TMP_InputField>().text;
-        string password = GameObject.Find("InputFieldPassword").GetComponent<TMP_InputField>().text;
+        string email = signupUsernameField.text;
+        string password = signupPasswordField.text;
 
 
         _registrationCoroutine = StartCoroutine(RegisterUser(email, password));
