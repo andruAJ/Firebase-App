@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a02cd56951325b645973551f0bae4cc0
+timeCreated: 1448907076
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 52143
+  packageName: 2D UFO Tutorial
+  packageVersion: 1.5
+  assetPath: Assets/_Completed-Assets/Prefabs/Pickup (Completed).prefab
+  uploadId: 282239

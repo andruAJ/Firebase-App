@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 755363d2f78ba824cba45a1ef8cf4294
+timeCreated: 1448906025
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 52143
+  packageName: 2D UFO Tutorial
+  packageVersion: 1.5
+  assetPath: Assets/_Completed-Assets/Scripts/CompleteRotator.cs
+  uploadId: 282239

@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="VisualContainer" style="flex-grow: 1;">
+        <ui:VisualElement name="Counter" style="flex-grow: 0; justify-content: center; align-self: center; align-content: center; flex-wrap: wrap; flex-direction: row; width: 20%; height: 6%;">
+            <ui:Label text="Counter:" name="PlaceholderText" style="flex-grow: 0; font-size: 46px;" />
+            <ui:Label text="0" name="CounterText" style="font-size: 46px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="WinLabel" style="flex-grow: 1; visibility: visible; display: none;">
+            <ui:Label text="Label" name="WinText" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

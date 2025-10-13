@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c74f553b118f94bfcbe70a5cdcc48114
+timeCreated: 1475590618
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 52143
+  packageName: 2D UFO Tutorial
+  packageVersion: 1.5
+  assetPath: Assets/TutorialInfo/Tutorial Info.prefab
+  uploadId: 282239
