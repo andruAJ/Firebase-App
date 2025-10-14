@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.InputSystem; // 👈 Importante para el nuevo sistema de Input
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CompletePlayerController_NewInput : MonoBehaviour
@@ -16,7 +16,7 @@ public class CompletePlayerController_NewInput : MonoBehaviour
     private UIDocument uiDocument;
 
     private Rigidbody2D rb2d;
-    private int count;
+    public int count { get; private set; }
     public int points = 1000;
     public int endpoints;
     private Vector2 movementInput; // 👈 almacena el input del nuevo sistema
@@ -54,7 +54,7 @@ public class CompletePlayerController_NewInput : MonoBehaviour
         if (other.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-            count = count + points;
+            AddPoints(points);
             SetCountText();
         }
     }
@@ -68,10 +68,13 @@ public class CompletePlayerController_NewInput : MonoBehaviour
         }
     }
 
-    public void ObtainScore() 
+    public void AddPoints(int amount)
     {
-        
+        count += amount;
+    }
 
-
+    public int GetScore()
+    {
+        return count;
     }
 }

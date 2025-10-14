@@ -17,6 +17,8 @@ public class ButtonLogout : MonoBehaviour
 
     public static event Action OnLogout;
 
+    public CompletePlayerController_NewInput player;
+
     void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -34,8 +36,8 @@ public class ButtonLogout : MonoBehaviour
         var currentUser = FirebaseAuth.DefaultInstance.CurrentUser;
         if (currentUser != null) 
         {
-            int score;
-            mDatabaseRef.Child("users").Child(currentUser.UserId).Child("score").SetValueAsync(false);
+            int score = player.count;
+            mDatabaseRef.Child("users").Child(currentUser.UserId).Child("score").SetValueAsync(score);
         }
 
         OnLogout?.Invoke();
