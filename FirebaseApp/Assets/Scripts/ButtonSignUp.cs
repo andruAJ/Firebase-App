@@ -79,7 +79,7 @@ public class ButtonSignUp : MonoBehaviour
                 result.User.DisplayName, result.User.UserId);
 
             var userId = result.User.UserId;
-            var username = signupEmailField.text;
+            var username = signupUsernameField.text;
 
             mDatabaseRef.Child("users").Child(userId).Child("username").SetValueAsync(username);
 
