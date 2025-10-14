@@ -30,10 +30,6 @@
             <ui:VisualElement name="User5Name" class="RowCells" style="flex-grow: 1;">
                 <ui:Label text="Label" name="User5NameText" />
             </ui:VisualElement>
-            <ui:VisualElement name="CurrentUserName" class="RowCells" style="flex-grow: 1;">
-                <ui:Label text="Label" name="CurrentUserNameText" />
-                <ui:Label text="Usuario actual" name="Label" style="visibility: visible; position: absolute; bottom: auto; left: 22%; top: 122%; color: rgb(253, 253, 253); justify-content: center; align-self: center; align-content: center; align-items: center;" />
-            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="ScoreRow" class="Rows">
             <ui:VisualElement name="ScoreHeader" class="RowCells RowHeader" style="flex-grow: 1;">
@@ -53,10 +49,6 @@
             </ui:VisualElement>
             <ui:VisualElement name="User5Score" class="RowCells" style="flex-grow: 1;">
                 <ui:Label text="Label" name="User5ScoreText" />
-            </ui:VisualElement>
-            <ui:VisualElement name="CurrentUserScore" class="RowCells" style="flex-grow: 1;">
-                <ui:Label text="Label" name="CurrentUserScoreText" />
-                <ui:Label text="Puntaje actual" name="Label" style="visibility: visible; position: absolute; bottom: auto; left: 22%; top: 122%; color: rgb(253, 253, 253); justify-content: center; align-self: center; align-content: center; align-items: center;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
