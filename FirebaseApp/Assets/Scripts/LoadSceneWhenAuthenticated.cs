@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class LoadSceneWhenAuthenticated : MonoBehaviour
 {
     [SerializeField]
-    private string _sceneToLoad = "GameScene";
+    private string _sceneToLoad = "_Complete-Game";
     [SerializeField]
     private bool _LoadSceneWhenAuthenticated = true;
 

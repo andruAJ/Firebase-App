@@ -439,6 +439,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   root: {fileID: 1414850642}
+  points: 1000
+  endpoints: 0
 --- !u!50 &251314639
 Rigidbody2D:
   serializedVersion: 5

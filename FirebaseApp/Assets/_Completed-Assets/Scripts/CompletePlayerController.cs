@@ -10,12 +10,15 @@ public class CompletePlayerController_NewInput : MonoBehaviour
 
     public Label countText;
     public Label winText;
+    public VisualElement winLabel;
 
     public GameObject root;
     private UIDocument uiDocument;
 
     private Rigidbody2D rb2d;
     private int count;
+    public int points = 1000;
+    public int endpoints;
     private Vector2 movementInput; // 👈 almacena el input del nuevo sistema
 
     // 🔹 Método que se llama automáticamente por el nuevo Input System
@@ -32,9 +35,11 @@ public class CompletePlayerController_NewInput : MonoBehaviour
         uiDocument = root.GetComponent<UIDocument>();
         winText = uiDocument.rootVisualElement.Q<Label>("WinText");
         countText = uiDocument.rootVisualElement.Q<Label>("CounterText");
+        winLabel = uiDocument.rootVisualElement.Q<VisualElement>("WinLabel");
         rb2d = GetComponent<Rigidbody2D>();
         count = 0;
         winText.text = "";
+        endpoints = 12*points;
         SetCountText();
     }
 
@@ -49,7 +54,7 @@ public class CompletePlayerController_NewInput : MonoBehaviour
         if (other.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-            count++;
+            count = count + points;
             SetCountText();
         }
     }
@@ -57,7 +62,9 @@ public class CompletePlayerController_NewInput : MonoBehaviour
     void SetCountText()
     {
         countText.text = "Count: " + count;
-        if (count >= 12)
+        if (count >= endpoints) { 
+            winLabel.style.display = DisplayStyle.Flex;
             winText.text = "You win!";
+        }
     }
 }
