@@ -67,4 +67,11 @@ public class CompletePlayerController_NewInput : MonoBehaviour
             winText.text = "You win!";
         }
     }
+
+    public void ObtainScore() 
+    {
+        
+
+
+    }
 }

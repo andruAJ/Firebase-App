@@ -21,6 +21,7 @@ public class LeaderBoardManager : MonoBehaviour
     }
     public void GetLeaderBoard()
     {
+        Debug.Log("Getting Leaderboard...");
         int i = 1;
         FirebaseDatabase.DefaultInstance
           .GetReference("users").OrderByChild("score").LimitToLast(5)

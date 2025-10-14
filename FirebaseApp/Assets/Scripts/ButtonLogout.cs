@@ -1,4 +1,5 @@
 using Firebase.Auth;
+using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ public class ButtonLogout : MonoBehaviour
     private VisualElement scoreCard;
     private VisualElement upperVisuals;
 
+    private DatabaseReference mDatabaseRef;
+
     public static event Action OnLogout;
 
     void Start()
@@ -21,11 +24,20 @@ public class ButtonLogout : MonoBehaviour
         logoutButton = uiDocument.rootVisualElement.Q<Button>("LogOut");
         scoreCard = uiDocument.rootVisualElement.Q<VisualElement>("ScoreTable");
         logoutButton.RegisterCallback<ClickEvent>(ev => OnPointerClick());
+        mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
     }
     public void OnPointerClick()
     {
         upperVisuals.style.display = DisplayStyle.None;
         scoreCard.style.display = DisplayStyle.Flex;
+
+        var currentUser = FirebaseAuth.DefaultInstance.CurrentUser;
+        if (currentUser != null) 
+        {
+            int score;
+            mDatabaseRef.Child("users").Child(currentUser.UserId).Child("score").SetValueAsync(false);
+        }
+
         OnLogout?.Invoke();
         FirebaseAuth.DefaultInstance.SignOut();
     }
