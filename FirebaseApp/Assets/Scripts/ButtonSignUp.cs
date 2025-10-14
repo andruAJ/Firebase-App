@@ -3,7 +3,6 @@ using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -16,6 +15,7 @@ public class ButtonSignUp : MonoBehaviour
     private VisualElement loginCard;
     private Button signupButton;    //yo
     private Button iniciarSesion;         //este es el botón para cambiar de carta
+    private TextField signupEmailField;
     private TextField signupUsernameField;
     private TextField signupPasswordField;
 
@@ -35,6 +35,7 @@ public class ButtonSignUp : MonoBehaviour
         signupCard = uiDocument.rootVisualElement.Q<VisualElement>("SignUp_Card");
         loginCard = uiDocument.rootVisualElement.Q<VisualElement>("LogIn_Card");
         signupButton = signupCard.Q<Button>("SignUp_Button");
+        signupEmailField = signupCard.Q<TextField>("Email_Register_TextField");
         signupUsernameField = signupCard.Q<TextField>("Username_Register_TextField");
         signupPasswordField = signupCard.Q<TextField>("Password_Register_TextField");
         iniciarSesion = signupCard.Q<Button>("TienesCuenta_Button");
@@ -46,7 +47,7 @@ public class ButtonSignUp : MonoBehaviour
 
     private void HandleRegisterButtonClicked()
     {
-        string email = signupUsernameField.text;
+        string email = signupEmailField.text;
         string password = signupPasswordField.text;
 
 
@@ -78,7 +79,7 @@ public class ButtonSignUp : MonoBehaviour
                 result.User.DisplayName, result.User.UserId);
 
             var userId = result.User.UserId;
-            var username = GameObject.Find("InputFieldUsername").GetComponent<TMP_InputField>().text;
+            var username = signupEmailField.text;
 
             mDatabaseRef.Child("users").Child(userId).Child("username").SetValueAsync(username);
 
