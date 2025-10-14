@@ -43,3 +43,8 @@
     background-color: rgb(232, 193, 22);
     -unity-font-style: bold;
 }
+
+.UpperVisuals {
+    margin-right: 80px;
+    margin-left: 80px;
+}

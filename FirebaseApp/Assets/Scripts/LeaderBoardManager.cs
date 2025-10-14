@@ -6,10 +6,11 @@ using UnityEngine;
 
 public class LeaderBoardManager : MonoBehaviour
 {
-    private void Start()
+    private void OnEnable()
     {
-        GetLeaderBoard();
+         ButtonLogout.OnLogout += GetLeaderBoard;
     }
+
     public void GetLeaderBoard()
     {
         FirebaseDatabase.DefaultInstance

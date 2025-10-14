@@ -1,10 +1,63 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="VisualContainer" style="flex-grow: 1;">
-        <ui:VisualElement name="Counter" style="flex-grow: 0; justify-content: center; align-self: center; align-content: center; flex-wrap: wrap; flex-direction: row; width: 20%; height: 6%;">
-            <ui:Label text="0" name="CounterText" style="font-size: 46px;" />
+    <Style src="project://database/Assets/UI/Style.uss?fileID=7433441132597879392&amp;guid=5357c1ed64eb7314d9dfac315e5106ee&amp;type=3#Style" />
+    <ui:VisualElement name="VisualContainer" style="flex-grow: 1; display: flex;">
+        <ui:VisualElement name="UpperVisuals" style="flex-grow: 0; justify-content: center; align-self: center; align-content: center; flex-wrap: wrap; flex-direction: row; width: 100%; height: 6%;">
+            <ui:Button text="LogOut" name="LogOut" class="UpperVisuals" style="width: auto; font-size: 30px;" />
+            <ui:Label text="0" name="CounterText" class="UpperVisuals" style="font-size: 46px;" />
+            <ui:Label text="Usuario" name="Usuario" class="UpperVisuals" style="justify-content: center; align-self: center; align-content: center; font-size: 46px;" />
         </ui:VisualElement>
         <ui:VisualElement name="WinLabel" style="flex-grow: 1; visibility: visible; display: none; width: 50%; height: 17%; position: absolute; align-self: center; justify-content: center; align-items: center; align-content: center; top: 40%;">
             <ui:Label text="Label" name="WinText" style="font-size: 100px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="ScoreTable" style="flex-grow: 0; width: 70%; height: 70%; align-self: center; white-space: normal; flex-direction: row; display: none; border-top-width: 7px; border-right-width: 7px; border-bottom-width: 7px; border-left-width: 7px; border-left-color: rgba(32, 32, 32, 0.81); border-right-color: rgba(32, 32, 32, 0.81); border-top-color: rgba(32, 32, 32, 0.81); border-bottom-color: rgba(32, 32, 32, 0.81); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
+        <ui:VisualElement name="UserRow" class="Rows" style="display: flex;">
+            <ui:VisualElement name="UserHeader" class="RowCells RowHeader" style="flex-grow: 1;">
+                <ui:Label text="User" name="UserHeaderText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User1Name" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User1NameText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User2Name" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User2NameText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User3Name" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User3NameText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User4Name" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User4NameText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User5Name" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User5NameText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="CurrentUserName" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="CurrentUserNameText" />
+                <ui:Label text="Usuario actual" name="Label" style="visibility: visible; position: absolute; bottom: auto; left: 22%; top: 122%; color: rgb(253, 253, 253); justify-content: center; align-self: center; align-content: center; align-items: center;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ScoreRow" class="Rows">
+            <ui:VisualElement name="ScoreHeader" class="RowCells RowHeader" style="flex-grow: 1;">
+                <ui:Label text="Score" name="ScoreHeaderText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User1Score" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User1ScoreText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User2Score" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User2ScoreText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User3Score" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User3ScoreText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User4Score" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User4ScoreText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="User5Score" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="User5ScoreText" />
+            </ui:VisualElement>
+            <ui:VisualElement name="CurrentUserScore" class="RowCells" style="flex-grow: 1;">
+                <ui:Label text="Label" name="CurrentUserScoreText" />
+                <ui:Label text="Puntaje actual" name="Label" style="visibility: visible; position: absolute; bottom: auto; left: 22%; top: 122%; color: rgb(253, 253, 253); justify-content: center; align-self: center; align-content: center; align-items: center;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

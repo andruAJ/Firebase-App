@@ -2,21 +2,24 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
 using System;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LabelUsername : MonoBehaviour
 {
-    [SerializeField]
-    private TMP_Text _label;
+    private Label _label;
 
-    private void Reset()
-    {
-        _label = GetComponent<TMP_Text>();
-    }
+    private UIDocument uiDocument;
+
+    //private void Reset()
+    //{
+    //    _label = GetComponent<TMP_Text>();
+    //}
     // Start is called before the first frame update
     void Start()
     {
+        uiDocument = GetComponent<UIDocument>();
+        _label = uiDocument.rootVisualElement.Q<Label>("Usuario");
         FirebaseAuth.DefaultInstance.StateChanged += HandleAuthChange;
     }
 

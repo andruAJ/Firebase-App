@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Style.uss?fileID=7433441132597879392&amp;guid=c3a5f754ae6392e4da92790900172445&amp;type=3#Style" />
+    <Style src="project://database/Assets/UI/Style.uss?fileID=7433441132597879392&amp;guid=5357c1ed64eb7314d9dfac315e5106ee&amp;type=3#Style" />
     <ui:VisualElement name="Canva" style="flex-grow: 1; background-color: rgb(46, 34, 70); justify-content: center; -unity-text-align: upper-left;">
         <ui:VisualElement name="LogIn_Card" style="flex-grow: 0; width: 30%; height: 70%; left: 3.5%; align-self: center; justify-content: center; align-items: center; align-content: center; background-color: rgb(226, 226, 226); border-top-width: 7px; border-right-width: 7px; border-bottom-width: 7px; border-left-width: 7px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-bottom-left-radius: 14px; display: none; visibility: visible; transition-timing-function: ease;">
             <ui:Label text="Log In" name="LogIn_Title" style="width: auto; height: 10%; justify-content: center; align-self: center; align-items: center; align-content: center; -unity-text-align: middle-center; font-size: 35%; color: rgb(132, 82, 161); -unity-font-style: bold;" />
@@ -16,56 +16,6 @@
                 <ui:Button text="¿No tienes cuenta?     Registrate" name="Registrarse_Button" style="background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="ScoreTable" style="flex-grow: 0; width: 70%; height: 70%; align-self: center; white-space: normal; flex-direction: row; display: none; border-top-width: 7px; border-right-width: 7px; border-bottom-width: 7px; border-left-width: 7px; border-left-color: rgba(32, 32, 32, 0.81); border-right-color: rgba(32, 32, 32, 0.81); border-top-color: rgba(32, 32, 32, 0.81); border-bottom-color: rgba(32, 32, 32, 0.81); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
-            <ui:VisualElement name="UserRow" class="Rows">
-                <ui:VisualElement name="UserHeader" class="RowCells RowHeader" style="flex-grow: 1;">
-                    <ui:Label text="User" name="UserHeaderText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User1Name" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User1NameText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User2Name" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User2NameText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User3Name" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User3NameText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User4Name" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User4NameText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User5Name" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User5NameText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="CurrentUserName" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="CurrentUserNameText" />
-                    <ui:Label text="Usuario actual" name="Label" style="visibility: visible; position: absolute; bottom: auto; left: 22%; top: 122%; color: rgb(253, 253, 253); justify-content: center; align-self: center; align-content: center; align-items: center;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement name="ScoreRow" class="Rows">
-                <ui:VisualElement name="ScoreHeader" class="RowCells RowHeader" style="flex-grow: 1;">
-                    <ui:Label text="Score" name="ScoreHeaderText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User1Score" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User1ScoreText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User2Score" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User2ScoreText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User3Score" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User3ScoreText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User4Score" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User4ScoreText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="User5Score" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="User5ScoreText" />
-                </ui:VisualElement>
-                <ui:VisualElement name="CurrentUserScore" class="RowCells" style="flex-grow: 1;">
-                    <ui:Label text="Label" name="CurrentUserScoreText" />
-                    <ui:Label text="Puntaje actual" name="Label" style="visibility: visible; position: absolute; bottom: auto; left: 22%; top: 122%; color: rgb(253, 253, 253); justify-content: center; align-self: center; align-content: center; align-items: center;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-        </ui:VisualElement>
         <ui:VisualElement name="SignUp_Card" style="flex-grow: 0; width: 30%; height: 70%; left: 3.5%; align-self: center; justify-content: center; align-items: center; align-content: center; background-color: rgb(226, 226, 226); border-top-width: 7px; border-right-width: 7px; border-bottom-width: 7px; border-left-width: 7px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-bottom-left-radius: 14px; display: flex; visibility: visible; transition-timing-function: ease;">
             <ui:Label text="Sign Up" name="SignUp_Title" style="width: auto; height: 10%; justify-content: center; align-self: center; align-items: center; align-content: center; -unity-text-align: middle-center; font-size: 35%; color: rgb(132, 82, 161); -unity-font-style: bold;" />
             <ui:VisualElement name="Username_Register" class="Index">
@@ -80,14 +30,6 @@
             <ui:VisualElement name="BottomSection" style="flex-grow: 0; flex-direction: row; align-self: center; align-items: center; align-content: center; justify-content: center;">
                 <ui:Button text="¿Ya tienes cuenta?               Ingresa" name="TienesCuenta_Button" style="background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
             </ui:VisualElement>
-        </ui:VisualElement>
-        <ui:VisualElement name="PonerPuntaje_Card" style="flex-grow: 0; width: 30%; height: 70%; left: 3.5%; align-self: center; justify-content: center; align-items: center; align-content: center; background-color: rgb(226, 226, 226); border-top-width: 7px; border-right-width: 7px; border-bottom-width: 7px; border-left-width: 7px; border-top-left-radius: 14px; border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-bottom-left-radius: 14px; display: none; visibility: visible; transition-timing-function: ease;">
-            <ui:Label text="Imaginate que aquí &#10;hay un juego bacano" name="ScoreTitle" style="width: 75%; height: 10%; justify-content: center; align-self: center; align-items: center; align-content: center; -unity-text-align: middle-center; font-size: 35%; color: rgb(132, 82, 161); -unity-font-style: bold; flex-wrap: wrap; top: -6%; bottom: auto;" />
-            <ui:VisualElement name="Puntaje_Index" class="Index">
-                <ui:Label text="Puntos:" name="Puntaje" />
-                <ui:TextField placeholder-text="Puntaje" name="Puntaje_TextField" style="width: 100%; border-top-width: 1.5px; border-right-width: 1.5px; border-bottom-width: 1.5px; border-left-width: 1.5px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgba(147, 147, 147, 0.48); border-right-color: rgba(147, 147, 147, 0.48); border-top-color: rgba(147, 147, 147, 0.48); border-bottom-color: rgba(147, 147, 147, 0.48); color: rgb(27, 27, 27); background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(255, 255, 255); -unity-text-outline-color: rgb(0, 0, 0);" />
-            </ui:VisualElement>
-            <ui:Button text="Asignar" name="Asignar_Button" style="background-color: rgb(132, 82, 161); color: rgb(238, 238, 238); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-left-color: rgb(93, 93, 93); border-right-color: rgb(32, 32, 32); border-top-color: rgb(94, 94, 94); border-bottom-color: rgb(32, 32, 32); border-top-width: 1.5px; border-right-width: 1.5px; border-bottom-width: 1.5px; border-left-width: 1.5px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
