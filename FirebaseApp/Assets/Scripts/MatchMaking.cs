@@ -15,14 +15,22 @@ public class MatchMaking : MonoBehaviour
     private DatabaseReference mDatabaseRef;
     private string Username;
 
+    private bool needRefresh = false;
+
     async void Start()
     {
         uiDocument = GetComponent<UIDocument>();
         Username = await GetUsername();
         findMatchButton = uiDocument.rootVisualElement.Q<Button>("SearchMatchButton");
         findMatchButton.RegisterCallback<ClickEvent>(ev => OnFindMatchClicked());
-        
+
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+
+        var reference = FirebaseDatabase.DefaultInstance
+        .GetReference("SearchingForMatch");
+
+        reference.ChildAdded += HandleChildAdded;
+        reference.ChildRemoved += HandleChildRemoved;
     }
     private async void OnFindMatchClicked()
     {
@@ -37,16 +45,6 @@ public class MatchMaking : MonoBehaviour
         if (dataSnapshot.Exists)
         {
             var playersList = new List<DataSnapshot>(dataSnapshot.Children);
-
-            //aquí voy a llenar el panel de jugadores
-            int i = 1;
-            foreach (var player in playersList)
-            {
-                var label = uiDocument.rootVisualElement.Q<Label>("MatchPlayer" + i);
-                if (label != null)
-                    label.text = player.Value?.ToString() ?? "";
-                i++;
-            }
 
             //aquí voy a emparejar aleatoriamente a los jugadores
             if (playersList.Count >= 2)
@@ -98,5 +96,68 @@ public class MatchMaking : MonoBehaviour
 
         return username;
     }
+    private void HandleChildRemoved(object sender, ChildChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        needRefresh = true;
+    }
 
+    private void HandleChildAdded(object sender, ChildChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        needRefresh = true;
+    }
+    private void OnApplicationQuit()
+    {
+        var currentUser = FirebaseAuth.DefaultInstance.CurrentUser;
+        mDatabaseRef.Child("SearchingForMatch").Child(currentUser.UserId).SetValueAsync(null);
+    }
+    private void Update()
+    {
+        if (needRefresh)
+        {
+            needRefresh = false;
+            RefreshPlayerLabels();
+        }
+    }
+    private async void RefreshPlayerLabels()
+    {
+        try
+        {
+            var usersRef = FirebaseDatabase.DefaultInstance.GetReference("SearchingForMatch");
+            var snapshot = await usersRef.GetValueAsync();
+            //vaciar
+            int i = 1;
+            while (true)
+            {
+                var label = uiDocument.rootVisualElement.Q<Label>("MatchPlayer" + i);
+                if (label == null) break;
+                label.text = "";
+                i++;
+            }
+
+            if (!snapshot.Exists) return;
+            //rellenar
+            i = 1;
+            foreach (var child in snapshot.Children)
+            {
+                var label = uiDocument.rootVisualElement.Q<Label>("MatchPlayer" + i);
+                if (label == null) break;
+                label.text = child.Value?.ToString() ?? "";
+                i++;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Error al refrescar lista de jugadores: " + ex.Message);
+        }
+    }
 }

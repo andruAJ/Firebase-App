@@ -39,6 +39,7 @@ public class ButtonLogout : MonoBehaviour
             int score = player.count;
             mDatabaseRef.Child("users").Child(currentUser.UserId).Child("score").SetValueAsync(score);
             mDatabaseRef.Child("users").Child(currentUser.UserId).Child("online").SetValueAsync(false);
+            mDatabaseRef.Child("SearchingForMatch").Child(currentUser.UserId).SetValueAsync(null);
         }
 
         OnLogout?.Invoke();
