@@ -16,7 +16,8 @@ public class OnlineUsersManager : MonoBehaviour
     private DatabaseReference mDatabaseRef;
     private string Username;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private bool needRefresh = false;
+
     async void Start()
     {
         uiDocument = GetComponent<UIDocument>();
@@ -31,15 +32,6 @@ public class OnlineUsersManager : MonoBehaviour
 
         reference.ChildAdded += HandleChildAdded;
         reference.ChildRemoved += HandleChildRemoved;
-        //reference.ChildChanged += HandleChildChanged;
-        //reference.ChildMoved += HandleChildMoved;
-
-
-        //FirebaseDatabase.DefaultInstance
-        // .GetReference("users-online")
-        // .ValueChanged += UsuarioOnlineEventHandler;
-
-
     }
 
     private void HandleChildRemoved(object sender, ChildChangedEventArgs args)
@@ -53,6 +45,7 @@ public class OnlineUsersManager : MonoBehaviour
         if (snapshot.Exists)
         {
             Debug.Log(snapshot.Value + " se ha desconectado");
+            needRefresh = true;
         }
     }
 
@@ -67,29 +60,9 @@ public class OnlineUsersManager : MonoBehaviour
         if (snapshot.Exists)
         {
             Debug.Log(snapshot.Value + " se ha conectado");
+            needRefresh = true;
         }
     }
-
-    //private void UsuarioOnlineEventHandler(object sender, ValueChangedEventArgs args)
-    //{
-    //    if (args.DatabaseError != null)
-    //    {
-    //        Debug.LogError(args.DatabaseError.Message);
-    //        return;
-    //    }
-    //    DataSnapshot snapshot = args.Snapshot;
-
-
-    //    if (snapshot.Exists)
-    //    {
-    //        var usersOnline = (Dictionary<string, object>)snapshot.Value;
-    //        foreach (var user in usersOnline)
-    //        {
-    //            Debug.Log(user.Value);
-    //        }
-    //    }
-        
-    //}
 
     private void HandleAuthStateChange(object sender, EventArgs e)
     {
@@ -121,6 +94,46 @@ public class OnlineUsersManager : MonoBehaviour
         }
        
         return username;
+    }
+    private void Update()
+    {
+        if (needRefresh)
+        {
+            needRefresh = false;
+            RefreshPlayerLabels();
+        }
+    }
+    private async void RefreshPlayerLabels()
+    {
+        try
+        {
+            var usersRef = FirebaseDatabase.DefaultInstance.GetReference("users-online");
+            var snapshot = await usersRef.GetValueAsync();
+            //vaciar
+            int i = 1;
+            while (true)
+            {
+                var label = uiDocument.rootVisualElement.Q<Label>("PlayerOnline" + i);
+                if (label == null) break;
+                label.text = "";
+                i++;
+            }
+
+            if (!snapshot.Exists) return;
+            //rellenar
+            i = 1;
+            foreach (var child in snapshot.Children)
+            {
+                var label = uiDocument.rootVisualElement.Q<Label>("PlayerOnline" + i);
+                if (label == null) break;
+                label.text = child.Value?.ToString() ?? "";
+                i++;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Error al refrescar lista de jugadores: " + ex.Message);
+        }
     }
     private void OnApplicationQuit()
     {
