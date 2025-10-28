@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using Firebase.Database;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -31,34 +32,44 @@ public class MatchMaking : MonoBehaviour
 
         DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("SearchingForMatch");
         var dataSnapshot = await usersRef.GetValueAsync();
-
         
+
         if (dataSnapshot.Exists)
         {
+            var playersList = new List<DataSnapshot>(dataSnapshot.Children);
+
             //aquí voy a llenar el panel de jugadores
             int i = 1;
-            foreach (var player in dataSnapshot.Children)
+            foreach (var player in playersList)
             {
-                uiDocument.rootVisualElement.Q<Label>("MatchPlayer"+i).text = player.Value.ToString();
+                var label = uiDocument.rootVisualElement.Q<Label>("MatchPlayer" + i);
+                if (label != null)
+                    label.text = player.Value?.ToString() ?? "";
                 i++;
             }
 
             //aquí voy a emparejar aleatoriamente a los jugadores
-            if (dataSnapshot.ChildrenCount >= 2)
+            if (playersList.Count >= 2)
             {
-                var enumerator = dataSnapshot.Children.GetEnumerator();
-                enumerator.MoveNext();
-                string player1Id = enumerator.Current.Key;
-                string player1Name = enumerator.Current.Value.ToString();
-                enumerator.MoveNext();
-                string player2Id = enumerator.Current.Key;
-                string player2Name = enumerator.Current.Value.ToString();
-                Debug.Log($"Partida encontrada entre {player1Name} y {player2Name}!");
+                playersList.RemoveAll(p => p.Key == currentUser.UserId);
+
+                if (playersList.Count == 0)
+                {
+                    Debug.Log("Solo estás tú buscando partida por ahora.");
+                    return;
+                }
+
+                var rnd = new System.Random();
+                int randomIndex = rnd.Next(playersList.Count);
+                var opponentSnapshot = playersList[randomIndex];
+                string opponentId = opponentSnapshot.Key;
+                string opponentName = opponentSnapshot.Value?.ToString();
+                Debug.Log($"Partida encontrada entre {Username} y {opponentName}!");
                 
-                uiDocument.rootVisualElement.Q<Label>("NameRival").text = ;
+                uiDocument.rootVisualElement.Q<Label>("NameRival").text = opponentName;
 
                 await mDatabaseRef.Child("SearchingForMatch").Child(currentUser.UserId).SetValueAsync(null);
-                await mDatabaseRef.Child("SearchingForMatch").Child(player2Id).SetValueAsync(null);
+                await mDatabaseRef.Child("SearchingForMatch").Child(opponentId).SetValueAsync(null);
             }
             else
             {
