@@ -1,4 +1,5 @@
 using Firebase.Auth;
+using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ public class ButtonLogin : MonoBehaviour
     private TextField passwordField;
     private Button registrarse;
 
+    private DatabaseReference mDatabaseRef;
+
     //void Reset()
     //{
     //    _loginButton = GetComponent<Button>();
@@ -32,6 +35,8 @@ public class ButtonLogin : MonoBehaviour
         usernameField = loginCard.Q<TextField>("Username_TextField");
         passwordField = loginCard.Q<TextField>("Password_TextField");
         registrarse = loginCard.Q<Button>("Registrarse_Button");
+
+        mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
         loginButton.RegisterCallback<ClickEvent>(ev => HandleLoginButtonClicked());
         registrarse.RegisterCallback<ClickEvent>(ev => { loginCard.style.display = DisplayStyle.None; signupCard.style.display = DisplayStyle.Flex; });
@@ -52,9 +57,10 @@ public class ButtonLogin : MonoBehaviour
                 return;
             }
 
-            Firebase.Auth.AuthResult result = task.Result;
+            Firebase.Auth.AuthResult result = task.Result;    
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 result.User.DisplayName, result.User.UserId);
+            mDatabaseRef.Child("users").Child(auth.CurrentUser.UserId).Child("online").SetValueAsync(true);
         });
     }
 }
