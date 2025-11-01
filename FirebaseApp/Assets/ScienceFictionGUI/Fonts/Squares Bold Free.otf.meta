@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 9b4fc19dff96abc429a722a4ada28880
+timeCreated: 1478095061
+licenseType: Store
+TrueTypeFontImporter:
+  serializedVersion: 3
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 1
+  characterPadding: 0
+  includeFontData: 1
+  fontNames: []
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 76123
+  packageName: Complete Sci-Fi GUI + psd files
+  packageVersion: 1.1
+  assetPath: Assets/ScienceFictionGUI/Fonts/Squares Bold Free.otf
+  uploadId: 327037
