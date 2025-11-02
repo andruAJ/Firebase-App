@@ -98,7 +98,11 @@ public class HandleOnlineUsers : MonoBehaviour
             if (!snapshot.Exists) return;
             //rellenar
             i = 0;
+            
             foreach (var child in snapshot.Children) {
+                if (child.Key == FirebaseAuth.DefaultInstance.CurrentUser?.UserId) {
+                    continue;
+                }
                 var label = users[i].GetComponentInChildren<TextMeshProUGUI>();
                 if (label == null) break;
                 label.text = child.Value?.ToString() ?? "";

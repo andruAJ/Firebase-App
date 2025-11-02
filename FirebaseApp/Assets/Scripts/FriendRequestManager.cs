@@ -17,6 +17,8 @@ public class FriendRequestManager : MonoBehaviour
     private string inboxRef =  "friendRequests/inbox"; 
     private string outboxRef = "friendRequests/outbox";
 
+    bool needRefresh = false;
+
     [SerializeField] private List<GameObject> outbox;
     [SerializeField] private List<GameObject> inbox;
 
@@ -46,7 +48,12 @@ public class FriendRequestManager : MonoBehaviour
 
         RefreshPlayerLabels();
     }
-
+    private void Update() {
+        if (needRefresh) {
+            RefreshPlayerLabels();
+            needRefresh = false;
+        }
+    }
     public void SendFriendRequest(string friendUserId,string friendUsername)
     {
 
@@ -68,9 +75,9 @@ public class FriendRequestManager : MonoBehaviour
                     });
                     //Referencia al outbox del usuario que envia la solicitud
                     mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendUserId).SetRawJsonValueAsync(friendRequestJson);
+                    needRefresh = true;
                 }
             });
-        RefreshPlayerLabels();
     }
     public void RespondFriendRequest(string friendUserId,string friendUsername ,int ResponseStatus)
     {
@@ -100,6 +107,7 @@ public class FriendRequestManager : MonoBehaviour
     private void SaveFriend(string friendUserId,string friendUsername)
     {
         mDatabaseUsersRef.Child(myUserId).Child("friends").Child(friendUserId).SetValueAsync(friendUsername);
+        needRefresh = true;
     }
     private async Task<string> GetUsername()
     {
@@ -132,6 +140,7 @@ public class FriendRequestManager : MonoBehaviour
         FriendResponse friendResponse = GetFriendResponseFromSnapshot(args.Snapshot);
 
         ProcessFriendResponse(friendResponse);
+        needRefresh = true;
     }
     private void HandleFriendResponseAdded(object sender, ChildChangedEventArgs args)
     {
@@ -148,13 +157,14 @@ public class FriendRequestManager : MonoBehaviour
             Debug.Log("Friend request to " + friendResponse.username + " is still pending.");
             return;
         }
-
+        needRefresh = true;
         ProcessFriendResponse(friendResponse);
 
     }
     private void HandleFriendResponseRemoved(object sender, ChildChangedEventArgs args)
     {
         //Puedo usar este metodo para eliminar graficamente las peticiones respondidas
+        needRefresh = true;
     }
 
     private FriendResponse GetFriendResponseFromSnapshot(DataSnapshot snapshot)
@@ -181,9 +191,13 @@ public class FriendRequestManager : MonoBehaviour
         {
             //La solicitud ha sido rechazada
             Debug.Log(" your friend request to " + friendResponse.username + " has been rejected.");
+            mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendResponse.userId)?.SetValueAsync(null);
+            mDatabaseUsersRef.Child(myUserId).Child(inboxRef).Child(friendResponse.userId)?.SetValueAsync(null);
+            mDatabaseUsersRef.Child(friendResponse.userId).Child(inboxRef).Child(myUserId)?.SetValueAsync(null);
+            mDatabaseUsersRef.Child(friendResponse.userId).Child(outboxRef).Child(myUserId)?.SetValueAsync(null);
         }
         //Eliminar la solicitud del outbox
-        //mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendResponse.userId).SetValueAsync(null);
+        needRefresh = true;
     }
     //Inbox
     //Manejar la llegada de nuevas solicitudes de amistad 
@@ -202,11 +216,12 @@ public class FriendRequestManager : MonoBehaviour
         Debug.Log("Friend request from "+ friendUsername+ ", userId " + args.Snapshot.Key);
 
         //Aqui puedo mostrar graficamente la solicitud de amistad entrante
-        
+        needRefresh = true;
     }
     private void HandleFriendRequestRemoved(object sender, ChildChangedEventArgs e)
     {
-        //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida 
+        //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida
+        needRefresh = true;
     }
 
     private async void RefreshPlayerLabels() {
@@ -238,21 +253,28 @@ public class FriendRequestManager : MonoBehaviour
             foreach (GameObject obj in inbox) {
                 obj.SetActive(false);
             }
+            Debug.Log(inSnapshot.ToString());
             if (!inSnapshot.Exists) return;
             //vaciar
             int j = 0;
             foreach (var child in inSnapshot.Children) {
-                var label = inbox[i].GetComponentInChildren<TextMeshProUGUI>();
+                var label = inbox[j].GetComponentInChildren<TextMeshProUGUI>();
                 if (label == null) break;
-                FriendResponse response = GetFriendResponseFromSnapshot(child);
-                response.status = 1;
+                FriendResponse response = new() {
+                    userId = child.Key,
+                    username = child.Value?.ToString(),
+                    status = 1,
+                };
                 label.text = response.username ?? "";
                 inbox[j].transform.GetChild(0).GetComponent<UnityEngine.UI.Button>().
                     onClick.AddListener(() =>
                     ProcessFriendResponse(response));
                 // buton Declinar
-                FriendResponse declineResponse = GetFriendResponseFromSnapshot(child);
-                response.status = 2;
+                FriendResponse declineResponse = new() {
+                    userId = child.Key,
+                    username = child.Value?.ToString(),
+                    status = 2,
+                };
                 inbox[j].transform.GetChild(1).GetComponent<UnityEngine.UI.Button>().
                     onClick.AddListener(() =>
                     ProcessFriendResponse(declineResponse));
