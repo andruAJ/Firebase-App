@@ -1,8 +1,11 @@
 using Firebase.Auth;
 using Firebase.Database;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class FriendRequestManager : MonoBehaviour
 {
@@ -13,6 +16,9 @@ public class FriendRequestManager : MonoBehaviour
 
     private string inboxRef =  "friendRequests/inbox"; 
     private string outboxRef = "friendRequests/outbox";
+
+    [SerializeField] private List<GameObject> outbox;
+    [SerializeField] private List<GameObject> inbox;
 
     public void Awake() {
         if (Instance != null) {
@@ -38,6 +44,7 @@ public class FriendRequestManager : MonoBehaviour
         outboxDatabaseRef.ChildChanged += HandleFriendResponseChanged;
         outboxDatabaseRef.ChildRemoved += HandleFriendResponseRemoved;
 
+        RefreshPlayerLabels();
     }
 
     public void SendFriendRequest(string friendUserId,string friendUsername)
@@ -63,6 +70,7 @@ public class FriendRequestManager : MonoBehaviour
                     mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendUserId).SetRawJsonValueAsync(friendRequestJson);
                 }
             });
+        RefreshPlayerLabels();
     }
     public void RespondFriendRequest(string friendUserId,string friendUsername ,int ResponseStatus)
     {
@@ -118,10 +126,12 @@ public class FriendRequestManager : MonoBehaviour
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
-        
-       FriendResponse friendResponse = GetFriendResponseFromSnapshot(args.Snapshot);
 
-       ProcessFriendResponse(friendResponse);
+
+
+        FriendResponse friendResponse = GetFriendResponseFromSnapshot(args.Snapshot);
+
+        ProcessFriendResponse(friendResponse);
     }
     private void HandleFriendResponseAdded(object sender, ChildChangedEventArgs args)
     {
@@ -132,7 +142,7 @@ public class FriendRequestManager : MonoBehaviour
         }
 
 
-        FriendResponse friendResponse = GetFriendResponseFromSnapshot(args.Snapshot);
+       FriendResponse friendResponse = GetFriendResponseFromSnapshot(args.Snapshot);
         if(friendResponse.status == 0)
         {
             Debug.Log("Friend request to " + friendResponse.username + " is still pending.");
@@ -173,7 +183,7 @@ public class FriendRequestManager : MonoBehaviour
             Debug.Log(" your friend request to " + friendResponse.username + " has been rejected.");
         }
         //Eliminar la solicitud del outbox
-        mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendResponse.userId).SetValueAsync(null);
+        //mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendResponse.userId).SetValueAsync(null);
     }
     //Inbox
     //Manejar la llegada de nuevas solicitudes de amistad 
@@ -192,11 +202,68 @@ public class FriendRequestManager : MonoBehaviour
         Debug.Log("Friend request from "+ friendUsername+ ", userId " + args.Snapshot.Key);
 
         //Aqui puedo mostrar graficamente la solicitud de amistad entrante
+        
     }
     private void HandleFriendRequestRemoved(object sender, ChildChangedEventArgs e)
     {
         //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida 
     }
+
+    private async void RefreshPlayerLabels() {
+        try {
+            // Outbox
+            var outRef = mDatabaseUsersRef.Child(myUserId).Child(outboxRef);
+            var outSnapshot = await outRef.GetValueAsync();
+            foreach(GameObject obj in outbox) {
+                obj.SetActive(false);
+            }
+            int i = 0;
+            if (!outSnapshot.Exists) return;
+            foreach (var child in outSnapshot.Children) {
+                var label = outbox[i].GetComponentInChildren<TextMeshProUGUI>();
+                if (label == null) break;
+                FriendResponse friendResponse = GetFriendResponseFromSnapshot(child);
+                friendResponse.status = 2;
+                label.text = friendResponse.username ?? "";
+                outbox[i].GetComponentInChildren<UnityEngine.UI.Button>().
+                    onClick.AddListener(() =>
+                    FriendRequestManager.Instance.ProcessFriendResponse(friendResponse));
+                outbox[i].SetActive(true);
+                i++;
+            }
+
+            // Inbox
+            var inRef = mDatabaseUsersRef.Child(myUserId).Child(inboxRef);
+            var inSnapshot = await inRef.GetValueAsync();
+            foreach (GameObject obj in inbox) {
+                obj.SetActive(false);
+            }
+            if (!inSnapshot.Exists) return;
+            //vaciar
+            int j = 0;
+            foreach (var child in inSnapshot.Children) {
+                var label = inbox[i].GetComponentInChildren<TextMeshProUGUI>();
+                if (label == null) break;
+                FriendResponse response = GetFriendResponseFromSnapshot(child);
+                response.status = 1;
+                label.text = response.username ?? "";
+                inbox[j].transform.GetChild(0).GetComponent<UnityEngine.UI.Button>().
+                    onClick.AddListener(() =>
+                    ProcessFriendResponse(response));
+                // buton Declinar
+                FriendResponse declineResponse = GetFriendResponseFromSnapshot(child);
+                response.status = 2;
+                inbox[j].transform.GetChild(1).GetComponent<UnityEngine.UI.Button>().
+                    onClick.AddListener(() =>
+                    ProcessFriendResponse(declineResponse));
+                inbox[j].SetActive(true);
+                j++;
+            }
+        } catch (Exception ex) {
+            Debug.LogError("Error al refrescar lista de jugadores: " + ex.Message);
+        }
+    }
+
 }
 public class FriendResponse
 {

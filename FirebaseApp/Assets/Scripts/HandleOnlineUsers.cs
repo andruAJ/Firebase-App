@@ -92,10 +92,7 @@ public class HandleOnlineUsers : MonoBehaviour
             //vaciar
             int i = 0;
             foreach (GameObject user in users) {
-                var label = user.GetComponentInChildren<TextMeshProUGUI>();
-                if (label == null) break;
-                label.text = "";
-                i++;
+                user.SetActive(false);
             }
 
             if (!snapshot.Exists) return;
