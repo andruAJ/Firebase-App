@@ -107,6 +107,7 @@ public class FriendRequestManager : MonoBehaviour
     private void SaveFriend(string friendUserId,string friendUsername)
     {
         mDatabaseUsersRef.Child(myUserId).Child("friends").Child(friendUserId).SetValueAsync(friendUsername);
+        mDatabaseUsersRef.Child(friendUserId).Child("friends").Child(myUserId).SetValueAsync(myUsername);
         mDatabaseUsersRef.Child(myUserId).Child(inboxRef).Child(friendUserId)?.SetValueAsync(null);
         mDatabaseUsersRef.Child(friendUserId).Child(outboxRef).Child(myUserId)?.SetValueAsync(null);
         needRefresh = true;
