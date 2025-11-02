@@ -107,6 +107,8 @@ public class FriendRequestManager : MonoBehaviour
     private void SaveFriend(string friendUserId,string friendUsername)
     {
         mDatabaseUsersRef.Child(myUserId).Child("friends").Child(friendUserId).SetValueAsync(friendUsername);
+        mDatabaseUsersRef.Child(myUserId).Child(inboxRef).Child(friendUserId)?.SetValueAsync(null);
+        mDatabaseUsersRef.Child(friendUserId).Child(outboxRef).Child(myUserId)?.SetValueAsync(null);
         needRefresh = true;
     }
     private async Task<string> GetUsername()
@@ -232,54 +234,55 @@ public class FriendRequestManager : MonoBehaviour
             foreach(GameObject obj in outbox) {
                 obj.SetActive(false);
             }
-            int i = 0;
-            if (!outSnapshot.Exists) return;
-            foreach (var child in outSnapshot.Children) {
-                var label = outbox[i].GetComponentInChildren<TextMeshProUGUI>();
-                if (label == null) break;
-                FriendResponse friendResponse = GetFriendResponseFromSnapshot(child);
-                friendResponse.status = 2;
-                label.text = friendResponse.username ?? "";
-                outbox[i].GetComponentInChildren<UnityEngine.UI.Button>().
-                    onClick.AddListener(() =>
-                    FriendRequestManager.Instance.ProcessFriendResponse(friendResponse));
-                outbox[i].SetActive(true);
-                i++;
-            }
-
             // Inbox
             var inRef = mDatabaseUsersRef.Child(myUserId).Child(inboxRef);
             var inSnapshot = await inRef.GetValueAsync();
             foreach (GameObject obj in inbox) {
                 obj.SetActive(false);
             }
-            Debug.Log(inSnapshot.ToString());
-            if (!inSnapshot.Exists) return;
-            //vaciar
+            int i = 0;
             int j = 0;
-            foreach (var child in inSnapshot.Children) {
-                var label = inbox[j].GetComponentInChildren<TextMeshProUGUI>();
-                if (label == null) break;
-                FriendResponse response = new() {
-                    userId = child.Key,
-                    username = child.Value?.ToString(),
-                    status = 1,
-                };
-                label.text = response.username ?? "";
-                inbox[j].transform.GetChild(0).GetComponent<UnityEngine.UI.Button>().
-                    onClick.AddListener(() =>
-                    ProcessFriendResponse(response));
-                // buton Declinar
-                FriendResponse declineResponse = new() {
-                    userId = child.Key,
-                    username = child.Value?.ToString(),
-                    status = 2,
-                };
-                inbox[j].transform.GetChild(1).GetComponent<UnityEngine.UI.Button>().
-                    onClick.AddListener(() =>
-                    ProcessFriendResponse(declineResponse));
-                inbox[j].SetActive(true);
-                j++;
+
+            if (outSnapshot.Exists) {
+                foreach (var child in outSnapshot.Children) {
+                    var label = outbox[i].GetComponentInChildren<TextMeshProUGUI>();
+                    if (label == null) break;
+                    FriendResponse friendResponse = GetFriendResponseFromSnapshot(child);
+                    friendResponse.status = 2;
+                    label.text = friendResponse.username ?? "";
+                    outbox[i].GetComponentInChildren<UnityEngine.UI.Button>().
+                        onClick.AddListener(() =>
+                        FriendRequestManager.Instance.ProcessFriendResponse(friendResponse));
+                    outbox[i].SetActive(true);
+                    i++;
+                }
+            } else if (inSnapshot.Exists) {
+                foreach (var child in inSnapshot.Children) {
+                    var label = inbox[j].GetComponentInChildren<TextMeshProUGUI>();
+                    if (label == null) break;
+                    FriendResponse response = new() {
+                        userId = child.Key,
+                        username = child.Value?.ToString(),
+                        status = 1,
+                    };
+                    label.text = response.username ?? "";
+                    inbox[j].transform.GetChild(0).GetComponent<UnityEngine.UI.Button>().
+                        onClick.AddListener(() =>
+                        ProcessFriendResponse(response));
+                    // buton Declinar
+                    FriendResponse declineResponse = new() {
+                        userId = child.Key,
+                        username = child.Value?.ToString(),
+                        status = 2,
+                    };
+                    inbox[j].transform.GetChild(1).GetComponent<UnityEngine.UI.Button>().
+                        onClick.AddListener(() =>
+                        ProcessFriendResponse(declineResponse));
+                    inbox[j].SetActive(true);
+                    j++;
+                }
+            } else {
+                return;
             }
         } catch (Exception ex) {
             Debug.LogError("Error al refrescar lista de jugadores: " + ex.Message);
