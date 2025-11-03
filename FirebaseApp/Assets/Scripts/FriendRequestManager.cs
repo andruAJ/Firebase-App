@@ -18,12 +18,20 @@ public class FriendRequestManager : MonoBehaviour
     private string inboxRef =  "friendRequests/inbox"; 
     private string outboxRef = "friendRequests/outbox";
 
-    bool needRefresh = false;
+    //bool needRefresh = false;
 
     [SerializeField] private List<GameObject> outbox;
     [SerializeField] private List<GameObject> inbox;
 
+    //UI Toolkit
+
     private UIDocument uiDocument;
+
+    private VisualElement friendRequestPanel;
+    private VisualElement friendOnlinePanel;
+
+    private Button accept_FR_Button;
+    private Button decline_FR_Button;
 
 
 
@@ -38,6 +46,13 @@ public class FriendRequestManager : MonoBehaviour
     async void Start()
     {
         uiDocument = GetComponent<UIDocument>();
+        friendOnlinePanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendOnlineNotification");
+        friendRequestPanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendRequestNotification");
+        accept_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Accepted");
+        decline_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Decline");
+
+
+
 
         mDatabaseUsersRef = FirebaseDatabase.DefaultInstance.GetReference("users");
         myUserId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
@@ -53,14 +68,14 @@ public class FriendRequestManager : MonoBehaviour
         outboxDatabaseRef.ChildChanged += HandleFriendResponseChanged;
         outboxDatabaseRef.ChildRemoved += HandleFriendResponseRemoved;
 
-        RefreshPlayerLabels();
+        //RefreshPlayerLabels();
     }
-    private void Update() {
-        if (needRefresh) {
-            RefreshPlayerLabels();
-            needRefresh = false;
-        }
-    }
+    //private void Update() {
+    //    if (needRefresh) {
+    //        RefreshPlayerLabels();
+    //        needRefresh = false;
+    //    }
+    //}
     public void SendFriendRequest(string friendUserId,string friendUsername)
     {
 
@@ -82,7 +97,7 @@ public class FriendRequestManager : MonoBehaviour
                     });
                     //Referencia al outbox del usuario que envia la solicitud
                     mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendUserId).SetRawJsonValueAsync(friendRequestJson);
-                    needRefresh = true;
+                    //needRefresh = true;
                 }
             });
     }
@@ -117,7 +132,7 @@ public class FriendRequestManager : MonoBehaviour
         mDatabaseUsersRef.Child(friendUserId).Child("friends").Child(myUserId).SetValueAsync(myUsername);
         mDatabaseUsersRef.Child(myUserId).Child(inboxRef).Child(friendUserId)?.SetValueAsync(null);
         mDatabaseUsersRef.Child(friendUserId).Child(outboxRef).Child(myUserId)?.SetValueAsync(null);
-        needRefresh = true;
+        //needRefresh = true;
     }
     private async Task<string> GetUsername()
     {
@@ -145,12 +160,10 @@ public class FriendRequestManager : MonoBehaviour
             return;
         }
 
-
-
         FriendResponse friendResponse = GetFriendResponseFromSnapshot(args.Snapshot);
 
         ProcessFriendResponse(friendResponse);
-        needRefresh = true;
+        //needRefresh = true;
     }
     private void HandleFriendResponseAdded(object sender, ChildChangedEventArgs args)
     {
@@ -167,15 +180,15 @@ public class FriendRequestManager : MonoBehaviour
             Debug.Log("Friend request to " + friendResponse.username + " is still pending.");
             return;
         }
-        needRefresh = true;
+        //needRefresh = true;
         ProcessFriendResponse(friendResponse);
 
     }
-    private void HandleFriendResponseRemoved(object sender, ChildChangedEventArgs args)
-    {
-        //Puedo usar este metodo para eliminar graficamente las peticiones respondidas
-        needRefresh = true;
-    }
+    //private void HandleFriendResponseRemoved(object sender, ChildChangedEventArgs args)
+    //{
+    //    //Puedo usar este metodo para eliminar graficamente las peticiones respondidas
+    //    needRefresh = true;
+    //}
 
     private FriendResponse GetFriendResponseFromSnapshot(DataSnapshot snapshot)
     {
@@ -207,7 +220,7 @@ public class FriendRequestManager : MonoBehaviour
             mDatabaseUsersRef.Child(friendResponse.userId).Child(outboxRef).Child(myUserId)?.SetValueAsync(null);
         }
         //Eliminar la solicitud del outbox
-        needRefresh = true;
+        //needRefresh = true;
     }
     //Inbox
     //Manejar la llegada de nuevas solicitudes de amistad 
@@ -225,15 +238,14 @@ public class FriendRequestManager : MonoBehaviour
         var friendUsername = (string)args.Snapshot.Value;
         Debug.Log("Friend request from "+ friendUsername+ ", userId " + args.Snapshot.Key);
 
-        //Aqui puedo mostrar graficamente la solicitud de amistad entrante
-        needRefresh = true;
+        //needRefresh = true;
     }
-    private void HandleFriendRequestRemoved(object sender, ChildChangedEventArgs e)
-    {
-        //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida
-        needRefresh = true;
-    }
-
+    //private void HandleFriendRequestRemoved(object sender, ChildChangedEventArgs e)
+    //{
+    //    //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida
+    //    needRefresh = true;
+    //}
+    /*
     private async void RefreshPlayerLabels() {
         try {
             // Outbox
@@ -295,7 +307,7 @@ public class FriendRequestManager : MonoBehaviour
         } catch (Exception ex) {
             Debug.LogError("Error al refrescar lista de jugadores: " + ex.Message);
         }
-    }
+    }*/
 
 }
 public class FriendResponse
