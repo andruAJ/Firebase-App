@@ -49,10 +49,17 @@
                 <ui:Label text="Ninguno" name="NameRival" class="UpperVisuals" style="justify-content: center; align-self: center; align-content: center; font-size: 30px; color: rgb(234, 233, 233); background-color: rgba(23, 67, 134, 0); margin-top: 0; margin-bottom: 0; padding-bottom: 0; padding-top: 0; padding-right: 1px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="FriendRequestNotification" style="flex-grow: 1; position: absolute; height: 6%; width: 28%; bottom: 1.5%; left: 1.5%;">
+        <ui:VisualElement name="FriendRequestNotification" style="flex-grow: 1; position: absolute; height: 6%; width: 28%; bottom: 1.5%; left: 1.5%; display: none;">
             <ui:VisualElement name="FR_Panel" style="flex-grow: 1; background-color: rgba(43, 79, 135, 0.82); border-left-color: rgb(36, 98, 193); border-right-color: rgb(36, 98, 193); border-top-color: rgb(36, 98, 193); border-bottom-color: rgb(36, 98, 193); border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; flex-direction: row;">
-                <ui:Label text="Label" name="FR_Name" />
-                <ui:Button text="Button" />
+                <ui:Label text="Label" name="FR_Name" style="justify-content: center; align-self: center; color: rgb(234, 233, 233); width: 66%; -unity-text-align: upper-center;" />
+                <ui:Button text="Accept" name="FR_Button_Accepted" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-width: 3px; border-right-width: 3px; border-top-width: 0; border-left-width: 0; background-color: rgb(65, 226, 42); border-left-color: rgb(36, 98, 193); border-right-color: rgb(36, 98, 193); border-top-color: rgb(36, 98, 193); border-bottom-color: rgb(36, 98, 193); color: rgb(234, 233, 233);" />
+                <ui:Button text="Decline&#10;" name="FR_Button_Accepted" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-width: 3px; border-right-width: 3px; border-top-width: 0; border-left-width: 0; background-color: rgb(226, 42, 42); border-left-color: rgb(36, 98, 193); border-right-color: rgb(36, 98, 193); border-top-color: rgb(36, 98, 193); border-bottom-color: rgb(36, 98, 193); color: rgb(234, 233, 233);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="FriendOnlineNotification" style="flex-grow: 1; position: absolute; height: 6%; width: 28%; bottom: 1.5%; left: auto; right: 1.5%; display: none;">
+            <ui:VisualElement name="FR_Panel" style="flex-grow: 1; background-color: rgba(43, 79, 135, 0.82); border-left-color: rgb(36, 98, 193); border-right-color: rgb(36, 98, 193); border-top-color: rgb(36, 98, 193); border-bottom-color: rgb(36, 98, 193); border-top-width: 4px; border-right-width: 4px; border-bottom-width: 4px; border-left-width: 4px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; flex-direction: row;">
+                <ui:Label text="Label" name="FR_Name" style="justify-content: center; align-self: center; color: rgb(234, 233, 233); width: 50%; -unity-text-align: upper-right;" />
+                <ui:Label text="is online" name="FR_IsOnline" style="justify-content: center; align-self: center; color: rgb(234, 233, 233); width: 50%; -unity-text-align: upper-left;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
