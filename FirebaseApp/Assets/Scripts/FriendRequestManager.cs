@@ -50,7 +50,8 @@ public class FriendRequestManager : MonoBehaviour
         friendRequestPanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendRequestNotification");
         accept_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Accepted");
         decline_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Decline");
-
+        accept_FR_Button.RegisterCallback<ClickEvent>(ev => ProcessFriendResponse());
+        decline_FR_Button.RegisterCallback<ClickEvent>(ev => ProcessFriendResponse());
 
 
 
