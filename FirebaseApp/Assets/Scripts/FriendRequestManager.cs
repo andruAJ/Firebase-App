@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class FriendRequestManager : MonoBehaviour
@@ -22,6 +23,10 @@ public class FriendRequestManager : MonoBehaviour
     [SerializeField] private List<GameObject> outbox;
     [SerializeField] private List<GameObject> inbox;
 
+    private UIDocument uiDocument;
+
+
+
     public void Awake() {
         if (Instance != null) {
             Destroy(gameObject);
@@ -32,6 +37,8 @@ public class FriendRequestManager : MonoBehaviour
 
     async void Start()
     {
+        uiDocument = GetComponent<UIDocument>();
+
         mDatabaseUsersRef = FirebaseDatabase.DefaultInstance.GetReference("users");
         myUserId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
         myUsername = await GetUsername();
