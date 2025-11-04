@@ -56,7 +56,7 @@ public class FriendsNotificationManager : MonoBehaviour
                     });
                     notificaton.style.display = DisplayStyle.Flex;
                     notificaton.Q<Label>("FR_Name").text = friendName;
-                    await System.Threading.Tasks.Task.Delay(3000);
+                    await System.Threading.Tasks.Task.Delay(5000);
                     notificaton.style.display = DisplayStyle.None;
                 }
             }

@@ -28,6 +28,7 @@ public class FriendRequestManager : MonoBehaviour
     private UIDocument uiDocument;
 
     private VisualElement friendRequestPanel;
+    private Label fr_NameLabel;
 
     private Button accept_FR_Button;
     private Button decline_FR_Button;
@@ -48,6 +49,7 @@ public class FriendRequestManager : MonoBehaviour
     {
         uiDocument = GetComponent<UIDocument>();
         friendRequestPanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendRequestNotification");
+        fr_NameLabel = uiDocument.rootVisualElement.Q<Label>("FR_Name");
         accept_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Accepted");
         decline_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Decline");
         sendRequest = uiDocument.rootVisualElement.Q<Button>("SendButton1");
@@ -259,6 +261,7 @@ public class FriendRequestManager : MonoBehaviour
         var friendUserId = args.Snapshot.Key;
         var friendUsername = (string)args.Snapshot.Value;
         Debug.Log("Friend request from "+ friendUsername+ ", userId " + args.Snapshot.Key);
+        fr_NameLabel.text = friendUsername;
         friendRequestPanel.style.display = DisplayStyle.Flex;
 
 
