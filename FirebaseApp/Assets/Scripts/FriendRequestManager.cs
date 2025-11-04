@@ -20,8 +20,8 @@ public class FriendRequestManager : MonoBehaviour
 
     //bool needRefresh = false;
 
-    [SerializeField] private List<GameObject> outbox;
-    [SerializeField] private List<GameObject> inbox;
+    //[SerializeField] private List<GameObject> outbox;
+    //[SerializeField] private List<GameObject> inbox;
 
     //UI Toolkit
 
@@ -50,8 +50,8 @@ public class FriendRequestManager : MonoBehaviour
         friendRequestPanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendRequestNotification");
         accept_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Accepted");
         decline_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Decline");
-        accept_FR_Button.RegisterCallback<ClickEvent>(ev => ProcessFriendResponse());
-        decline_FR_Button.RegisterCallback<ClickEvent>(ev => ProcessFriendResponse());
+        accept_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels());
+        decline_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels());
 
 
 
@@ -185,11 +185,11 @@ public class FriendRequestManager : MonoBehaviour
         ProcessFriendResponse(friendResponse);
 
     }
-    //private void HandleFriendResponseRemoved(object sender, ChildChangedEventArgs args)
-    //{
-    //    //Puedo usar este metodo para eliminar graficamente las peticiones respondidas
-    //    needRefresh = true;
-    //}
+    private void HandleFriendResponseRemoved(object sender, ChildChangedEventArgs args)
+    {
+        //Puedo usar este metodo para eliminar graficamente las peticiones respondidas
+        RefreshPlayerLabels();
+    }
 
     private FriendResponse GetFriendResponseFromSnapshot(DataSnapshot snapshot)
     {
@@ -241,66 +241,71 @@ public class FriendRequestManager : MonoBehaviour
 
         //needRefresh = true;
     }
-    //private void HandleFriendRequestRemoved(object sender, ChildChangedEventArgs e)
-    //{
-    //    //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida
-    //    needRefresh = true;
-    //}
-    /*
+    private void HandleFriendRequestRemoved(object sender, ChildChangedEventArgs e)
+    {
+        //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida
+        RefreshPlayerLabels();
+    }
+
     private async void RefreshPlayerLabels() {
         try {
             // Outbox
             var outRef = mDatabaseUsersRef.Child(myUserId).Child(outboxRef);
             var outSnapshot = await outRef.GetValueAsync();
-            foreach(GameObject obj in outbox) {
-                obj.SetActive(false);
-            }
+            //foreach(GameObject obj in outbox) {
+            //    obj.SetActive(false);
+            //}
             // Inbox
             var inRef = mDatabaseUsersRef.Child(myUserId).Child(inboxRef);
             var inSnapshot = await inRef.GetValueAsync();
-            foreach (GameObject obj in inbox) {
-                obj.SetActive(false);
-            }
-            int i = 0;
-            int j = 0;
+            //foreach (GameObject obj in inbox)
+            //{
+            //    obj.SetActive(false);
+            //}
+            //int i = 0;
+            //int j = 0;
 
             if (outSnapshot.Exists) {
                 foreach (var child in outSnapshot.Children) {
-                    var label = outbox[i].GetComponentInChildren<TextMeshProUGUI>();
-                    if (label == null) break;
+                    //var label = outbox[i].GetComponentInChildren<TextMeshProUGUI>();
+                    //if (label == null) break;
                     FriendResponse friendResponse = GetFriendResponseFromSnapshot(child);
                     friendResponse.status = 2;
-                    label.text = friendResponse.username ?? "";
-                    outbox[i].GetComponentInChildren<UnityEngine.UI.Button>().
-                        onClick.AddListener(() =>
-                        FriendRequestManager.Instance.ProcessFriendResponse(friendResponse));
-                    outbox[i].SetActive(true);
-                    i++;
+                    //label.text = friendResponse.username ?? "";
+                    //outbox[i].GetComponentInChildren<UnityEngine.UI.Button>().
+                    //    onClick.AddListener(() =>
+                    //    FriendRequestManager.Instance.ProcessFriendResponse(friendResponse));
+                    //outbox[i].SetActive(true);
+                    //i++;
+
+                    ProcessFriendResponse(friendResponse);
                 }
             } else if (inSnapshot.Exists) {
                 foreach (var child in inSnapshot.Children) {
-                    var label = inbox[j].GetComponentInChildren<TextMeshProUGUI>();
-                    if (label == null) break;
+                    //var label = inbox[j].GetComponentInChildren<TextMeshProUGUI>();
+                    //if (label == null) break;
                     FriendResponse response = new() {
                         userId = child.Key,
                         username = child.Value?.ToString(),
                         status = 1,
                     };
-                    label.text = response.username ?? "";
-                    inbox[j].transform.GetChild(0).GetComponent<UnityEngine.UI.Button>().
-                        onClick.AddListener(() =>
-                        ProcessFriendResponse(response));
+                    //label.text = response.username ?? "";
+                    //inbox[j].transform.GetChild(0).GetComponent<UnityEngine.UI.Button>().
+                    //    onClick.AddListener(() =>
+                    //    ProcessFriendResponse(response));
+                    ProcessFriendResponse(response);
                     // buton Declinar
                     FriendResponse declineResponse = new() {
                         userId = child.Key,
                         username = child.Value?.ToString(),
                         status = 2,
                     };
-                    inbox[j].transform.GetChild(1).GetComponent<UnityEngine.UI.Button>().
-                        onClick.AddListener(() =>
-                        ProcessFriendResponse(declineResponse));
-                    inbox[j].SetActive(true);
-                    j++;
+                    //inbox[j].transform.GetChild(1).GetComponent<UnityEngine.UI.Button>().
+                    //    onClick.AddListener(() =>
+                    //    ProcessFriendResponse(declineResponse));
+                    //inbox[j].SetActive(true);
+                    //j++;
+                    ProcessFriendResponse(declineResponse);
                 }
             } else {
                 return;
@@ -308,7 +313,7 @@ public class FriendRequestManager : MonoBehaviour
         } catch (Exception ex) {
             Debug.LogError("Error al refrescar lista de jugadores: " + ex.Message);
         }
-    }*/
+    }
 
 }
 public class FriendResponse
