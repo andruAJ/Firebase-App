@@ -28,7 +28,6 @@ public class FriendRequestManager : MonoBehaviour
     private UIDocument uiDocument;
 
     private VisualElement friendRequestPanel;
-    private VisualElement friendOnlinePanel;
 
     private Button accept_FR_Button;
     private Button decline_FR_Button;
@@ -48,14 +47,13 @@ public class FriendRequestManager : MonoBehaviour
     async void Start()
     {
         uiDocument = GetComponent<UIDocument>();
-        friendOnlinePanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendOnlineNotification");
         friendRequestPanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendRequestNotification");
         accept_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Accepted");
         decline_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Decline");
         sendRequest = uiDocument.rootVisualElement.Q<Button>("SendButton1");
         sendRequest2 = uiDocument.rootVisualElement.Q<Button>("SendButton2");
-        accept_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels());
-        decline_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels());
+        accept_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels(1));
+        decline_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels(2));
         sendRequest.RegisterCallback<ClickEvent>(ev => SendFriendRequest());
         sendRequest2.RegisterCallback<ClickEvent>(ev => SendFriendRequest());
 
@@ -210,7 +208,7 @@ public class FriendRequestManager : MonoBehaviour
     private void HandleFriendResponseRemoved(object sender, ChildChangedEventArgs args)
     {
         //Puedo usar este metodo para eliminar graficamente las peticiones respondidas
-        RefreshPlayerLabels();
+        //RefreshPlayerLabels();
     }
 
     private FriendResponse GetFriendResponseFromSnapshot(DataSnapshot snapshot)
@@ -269,10 +267,10 @@ public class FriendRequestManager : MonoBehaviour
     private void HandleFriendRequestRemoved(object sender, ChildChangedEventArgs e)
     {
         //Aqui puedo eliminar graficamente la solicitud de amistad que ha sido respondida
-        RefreshPlayerLabels();
+        //RefreshPlayerLabels();
     }
 
-    private async void RefreshPlayerLabels() {
+    private async void RefreshPlayerLabels(int status) {
         try {
             Debug.Log("RefreshPlayerLabels");
             // Outbox
@@ -315,7 +313,7 @@ public class FriendRequestManager : MonoBehaviour
                     FriendResponse response = new() {
                         userId = child.Key,
                         username = child.Value?.ToString(),
-                        status = 1,
+                        status = status,
                     };
                     //label.text = response.username ?? "";
                     //inbox[j].transform.GetChild(0).GetComponent<UnityEngine.UI.Button>().
@@ -326,7 +324,7 @@ public class FriendRequestManager : MonoBehaviour
                     FriendResponse declineResponse = new() {
                         userId = child.Key,
                         username = child.Value?.ToString(),
-                        status = 2,
+                        status = status,
                     };
                     //inbox[j].transform.GetChild(1).GetComponent<UnityEngine.UI.Button>().
                     //    onClick.AddListener(() =>
