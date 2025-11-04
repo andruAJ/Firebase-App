@@ -275,7 +275,6 @@ public class FriendRequestManager : MonoBehaviour
 
     private async void RefreshPlayerLabels(int status) {
         try {
-            Debug.Log("RefreshPlayerLabels");
             // Outbox
             var outRef = mDatabaseUsersRef.Child(myUserId).Child(outboxRef);
             var outSnapshot = await outRef.GetValueAsync();
@@ -294,7 +293,6 @@ public class FriendRequestManager : MonoBehaviour
 
             if (outSnapshot.Exists) {
                 foreach (var child in outSnapshot.Children) {
-                    Debug.Log("Primer foreach");
                     //var label = outbox[i].GetComponentInChildren<TextMeshProUGUI>();
                     //if (label == null) break;
                     FriendResponse friendResponse = GetFriendResponseFromSnapshot(child);
@@ -310,7 +308,6 @@ public class FriendRequestManager : MonoBehaviour
                 }
             } else if (inSnapshot.Exists) {
                 foreach (var child in inSnapshot.Children) {
-                    Debug.Log("Segundo foreach");
                     //var label = inbox[j].GetComponentInChildren<TextMeshProUGUI>();
                     //if (label == null) break;
                     FriendResponse response = new() {
@@ -335,6 +332,7 @@ public class FriendRequestManager : MonoBehaviour
                     //inbox[j].SetActive(true);
                     //j++;
                     ProcessFriendResponse(declineResponse);
+                    friendRequestPanel.style.display = DisplayStyle.None;
                 }
             } else {
                 return;
