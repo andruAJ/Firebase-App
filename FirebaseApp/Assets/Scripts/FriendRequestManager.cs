@@ -32,6 +32,8 @@ public class FriendRequestManager : MonoBehaviour
 
     private Button accept_FR_Button;
     private Button decline_FR_Button;
+    private Button sendRequest;
+    private Button sendRequest2;
 
 
 
@@ -50,8 +52,12 @@ public class FriendRequestManager : MonoBehaviour
         friendRequestPanel = uiDocument.rootVisualElement.Q<VisualElement>("FriendRequestNotification");
         accept_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Accepted");
         decline_FR_Button = uiDocument.rootVisualElement.Q<Button>("FR_Button_Decline");
+        sendRequest = uiDocument.rootVisualElement.Q<Button>("SendButton1");
+        sendRequest2 = uiDocument.rootVisualElement.Q<Button>("SendButton2");
         accept_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels());
         decline_FR_Button.RegisterCallback<ClickEvent>(ev => RefreshPlayerLabels());
+        sendRequest.RegisterCallback<ClickEvent>(ev => SendFriendRequest());
+        sendRequest2.RegisterCallback<ClickEvent>(ev => SendFriendRequest());
 
 
 
@@ -77,30 +83,46 @@ public class FriendRequestManager : MonoBehaviour
     //        needRefresh = false;
     //    }
     //}
-    public void SendFriendRequest(string friendUserId,string friendUsername)
+    private void EnviarFriendRequest(string friendUserId, string friendUsername)
     {
-
-        //Referencia al inbox del usuario al que le quiero enviar la solicitud
         mDatabaseUsersRef.Child(friendUserId).Child(inboxRef).Child(myUserId).SetValueAsync(myUsername)
-            .ContinueWith( task =>
-            {
-                if (task.IsFaulted || task.IsCanceled)
+                .ContinueWith(task =>
                 {
-                    Debug.LogError("Error sending friend request: " + task.Exception);
-                }
-                else
-                {
-                    Debug.Log("Friend request sent to user: " + friendUserId);
-                    string friendRequestJson = JsonUtility.ToJson(new FriendResponse
+                    if (task.IsFaulted || task.IsCanceled)
                     {
-                        username = friendUsername,
-                        status = 0 // pending
-                    });
-                    //Referencia al outbox del usuario que envia la solicitud
-                    mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendUserId).SetRawJsonValueAsync(friendRequestJson);
-                    //needRefresh = true;
-                }
-            });
+                        Debug.LogError("Error sending friend request: " + task.Exception);
+                    }
+                    else
+                    {
+                        Debug.Log("Friend request sent to user: " + friendUserId);
+                        string friendRequestJson = JsonUtility.ToJson(new FriendResponse
+                        {
+                            username = friendUsername,
+                            status = 0 // pending
+                        });
+                        //Referencia al outbox del usuario que envia la solicitud
+                        mDatabaseUsersRef.Child(myUserId).Child(outboxRef).Child(friendUserId).SetRawJsonValueAsync(friendRequestJson);
+                        //needRefresh = true;
+                    }
+                });
+    }
+    public async void SendFriendRequest(/*string friendUserId,string friendUsername*/)
+    {
+        var usersRef = FirebaseDatabase.DefaultInstance.GetReference("users-online");
+        var snapshot = await usersRef.GetValueAsync();
+
+        if (!snapshot.Exists) return;
+        //rellenar
+
+        foreach (var child in snapshot.Children)
+        {
+            if (child.Key == FirebaseAuth.DefaultInstance.CurrentUser?.UserId)
+            {
+                continue;
+            }
+            //Referencia al inbox del usuario al que le quiero enviar la solicitud
+            EnviarFriendRequest(child.Key, child.Value?.ToString());
+        } 
     }
     public void RespondFriendRequest(string friendUserId,string friendUsername ,int ResponseStatus)
     {
@@ -204,6 +226,7 @@ public class FriendRequestManager : MonoBehaviour
     {
         if (friendResponse.status == 0)
             return;
+        Debug.Log("Processing friend response for " + friendResponse.username + " with status " + friendResponse.status);
         //Procesar la respuesta de la solicitud de amistad
         if (friendResponse.status == 1)
         {
@@ -249,6 +272,7 @@ public class FriendRequestManager : MonoBehaviour
 
     private async void RefreshPlayerLabels() {
         try {
+            Debug.Log("RefreshPlayerLabels");
             // Outbox
             var outRef = mDatabaseUsersRef.Child(myUserId).Child(outboxRef);
             var outSnapshot = await outRef.GetValueAsync();
@@ -267,6 +291,7 @@ public class FriendRequestManager : MonoBehaviour
 
             if (outSnapshot.Exists) {
                 foreach (var child in outSnapshot.Children) {
+                    Debug.Log("Primer foreach");
                     //var label = outbox[i].GetComponentInChildren<TextMeshProUGUI>();
                     //if (label == null) break;
                     FriendResponse friendResponse = GetFriendResponseFromSnapshot(child);
@@ -282,6 +307,7 @@ public class FriendRequestManager : MonoBehaviour
                 }
             } else if (inSnapshot.Exists) {
                 foreach (var child in inSnapshot.Children) {
+                    Debug.Log("Segundo foreach");
                     //var label = inbox[j].GetComponentInChildren<TextMeshProUGUI>();
                     //if (label == null) break;
                     FriendResponse response = new() {

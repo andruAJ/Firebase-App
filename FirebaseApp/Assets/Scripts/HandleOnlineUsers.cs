@@ -99,19 +99,19 @@ public class HandleOnlineUsers : MonoBehaviour
             //rellenar
             i = 0;
             
-            foreach (var child in snapshot.Children) {
-                if (child.Key == FirebaseAuth.DefaultInstance.CurrentUser?.UserId) {
-                    continue;
-                }
-                var label = users[i].GetComponentInChildren<TextMeshProUGUI>();
-                if (label == null) break;
-                label.text = child.Value?.ToString() ?? "";
-                users[i].GetComponentInChildren<UnityEngine.UI.Button>().
-                    onClick.AddListener(() => 
-                    FriendRequestManager.Instance.SendFriendRequest(child.Key, child.Value?.ToString()));
-                users[i].SetActive(true);
-                i++;
-            }
+            //foreach (var child in snapshot.Children) {
+            //    if (child.Key == FirebaseAuth.DefaultInstance.CurrentUser?.UserId) {
+            //        continue;
+            //    }
+            //    var label = users[i].GetComponentInChildren<TextMeshProUGUI>();
+            //    if (label == null) break;
+            //    label.text = child.Value?.ToString() ?? "";
+            //    users[i].GetComponentInChildren<UnityEngine.UI.Button>().
+            //        onClick.AddListener(() => 
+            //        FriendRequestManager.Instance.SendFriendRequest(child.Key, child.Value?.ToString()));
+            //    users[i].SetActive(true);
+            //    i++;
+            //}
         } catch (Exception ex) {
             Debug.LogError("Error al refrescar lista de jugadores: " + ex.Message);
         }
