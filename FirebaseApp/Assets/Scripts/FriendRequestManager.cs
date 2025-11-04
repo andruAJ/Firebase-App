@@ -261,6 +261,8 @@ public class FriendRequestManager : MonoBehaviour
         var friendUserId = args.Snapshot.Key;
         var friendUsername = (string)args.Snapshot.Value;
         Debug.Log("Friend request from "+ friendUsername+ ", userId " + args.Snapshot.Key);
+        friendRequestPanel.style.display = DisplayStyle.Flex;
+
 
         //needRefresh = true;
     }
